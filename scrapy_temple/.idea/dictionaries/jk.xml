@@ -3,8 +3,13 @@
     <words>
       <w>autothrottle</w>
       <w>chorme</w>
+      <w>downloadermiddlewares</w>
+      <w>dupefilter</w>
+      <w>httpcache</w>
+      <w>httpcompression</w>
       <w>middlewares</w>
       <w>newspider</w>
+      <w>prefs</w>
       <w>robotstxt</w>
       <w>scrapy</w>
       <w>telnetconsole</w>

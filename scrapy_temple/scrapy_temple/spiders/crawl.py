@@ -8,7 +8,7 @@ class CSpider(CrawlSpider):
     name = 'cra'
     #allowed_domains = ['basic']
     start_urls = ['http://sousuo.gov.cn/list.htm?q=&n=100&p=0&t=paper&sort=pubtime&childtype=&subchildtype=&pcodeJiguan=&pcodeYear=&pcodeNum=&location=&searchfield=&title=&content=&pcode=&puborg=&timetype=timeqb&mintime=&maxtime=']
-    mongodb_col_name = 'a_20190312'
+    mongodb_col_name = 'a_20190312_1'
 
     rules = (
         Rule(

@@ -14,22 +14,20 @@ BOT_NAME = 'scrapy_temple'
 SPIDER_MODULES = ['scrapy_temple.spiders']
 NEWSPIDER_MODULE = 'scrapy_temple.spiders'
 
-
 # mongodb 数据库参数
 MONGODB_URL = 'mongodb://localhost:27017/'
 MONGODB_DB = 'test'
 # MONGODB_DB_COL = 'COLLECTION'
 
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrapy_temple (+http://www.yourdomain.com)'
+# USER_AGENT = 'scrapy_temple (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -53,57 +51,64 @@ COOKIES_ENABLED = False
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'scrapy_temple.middlewares.ScrapyTempleSpiderMiddleware': 543,
-#}
+# SPIDER_MIDDLEWARES = {
+#     # 开启splash execute 服务
+#     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+#     'scrapy_temple.middlewares.ScrapyTempleSpiderMiddleware': 543,
+# }
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    # mongodb 过虑字段 url
-    'scrapy_temple.middlewares.ScrapyTempleDownloaderMiddleware': 10,
-    # 随机设置 user-agent 与 手动加cookies
-    # 'scrapy_temple.middlewares.RandomUserAgent': 20,
-    # 阿布云动态ip 代理
-    # 'scrapy_temple.middlewares.ProxyMiddleware': 30,
-    # selenium 模拟请求
-    # 'scrapy_temple.middlewares.SeleniumChorme': 40,
-
-}
+# DOWNLOADER_MIDDLEWARES = {
+#     # mongodb 过虑字段 url
+#     'scrapy_temple.middlewares.ScrapyTempleDownloaderMiddleware': 10,
+#     # 随机设置 user-agent 与 手动加cookies
+#     # 'scrapy_temple.middlewares.RandomUserAgent': 20,
+#     # 阿布云动态ip 代理
+#     # 'scrapy_temple.middlewares.ProxyMiddleware': 30,
+#     # selenium 模拟请求
+#     'scrapy_temple.middlewares.SeleniumChorme': 40,
+#     # splash execute service
+#     'scrapy_splash.SplashCookiesMiddleware': 723,
+#     'scrapy_splash.SplashMiddleware': 725,
+#     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+#
+# }
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
+# EXTENSIONS = {
 #    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+# }
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'scrapy_temple.pipelines.ScrapyTemplePipeline': 300,
-    'scrapy_temple.pipelines.SaveData': 400,
-}
+# ITEM_PIPELINES = {
+#     'scrapy_temple.pipelines.OpenChrome': 200,
+#     'scrapy_temple.pipelines.ScrapyTemplePipeline': 300,
+#     'scrapy_temple.pipelines.SaveData': 400,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+# AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-#AUTOTHROTTLE_START_DELAY = 5
+# AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
+# AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+# AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 # Enable showing throttling stats for every response received:
-#AUTOTHROTTLE_DEBUG = False
+# AUTOTHROTTLE_DEBUG = False
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-#HTTPCACHE_ENABLED = True
-#HTTPCACHE_EXPIRATION_SECS = 0
-#HTTPCACHE_DIR = 'httpcache'
-#HTTPCACHE_IGNORE_HTTP_CODES = []
-#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# HTTPCACHE_ENABLED = True
+# HTTPCACHE_EXPIRATION_SECS = 0
+# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_IGNORE_HTTP_CODES = []
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 USER_AGENTS = [
     "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)",
@@ -117,3 +122,14 @@ USER_AGENTS = [
 ]
 # 中间件处理成dict
 COOKIES_STR = ''
+
+# Selenium chrome 选项
+# 要先运行 chrome driver 服务
+NO_IMAGES = True
+HEADLESS = False
+SERVICE_URL = 'http://localhost:9515'
+
+# splash 服务
+SPLASH_URL = 'http://192.168.99.100:8050'
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'

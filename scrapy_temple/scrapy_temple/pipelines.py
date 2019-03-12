@@ -8,6 +8,40 @@ import pymongo
 import re
 from scrapy.exceptions import DropItem
 from w3lib.html import remove_tags
+from selenium import webdriver
+
+
+class OpenChrome(object):
+    def __init__(self, url, no_img, headless):
+        self.url = url
+        self.no_img = no_img
+        self.headless = headless
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            url=crawler.settings.get('SERVICE_URL'),
+            no_img=crawler.settings.get('NO_IMAGES'),
+            headless=crawler.settings.get('HEADLESS')
+        )
+
+    def open_spider(self, spider):
+        options = webdriver.ChromeOptions()
+        prefs = {
+            'profile.default_content_setting_values': {
+                'images': 2
+            }
+        }
+        if self.headless:
+            options.add_argument('--headless')
+        if self.no_img:
+            options.add_experimental_option('prefs', prefs)
+        spider.chrome = webdriver.Remote(self.url,
+                                         desired_capabilities=options.to_capabilities()
+                                         )
+
+    def close_spider(self, spider):
+        spider.chrome.close()
 
 
 class ScrapyTemplePipeline(object):
@@ -23,7 +57,6 @@ class ScrapyTemplePipeline(object):
                 return result
         else:
             return target_str
-
 
     def process_item(self, item, spider):
         try:

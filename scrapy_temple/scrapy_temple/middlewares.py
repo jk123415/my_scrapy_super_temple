@@ -8,7 +8,6 @@
 import random
 import base64
 import time
-from selenium import webdriver
 from scrapy import signals
 from scrapy.exceptions import IgnoreRequest
 from scrapy.http import HtmlResponse
@@ -152,16 +151,11 @@ class ProxyMiddleware(object):
 
 # selenium chrome 模拟请求
 class SeleniumChorme(object):
-    def __init__(self):
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        self.chrome = webdriver.Remote('http://localhost:9515', desired_capabilities=options.to_capabilities())
-
     def process_request(self, request, spider):
         # Called for each request that goes through the downloader
         # middleware.
         url = request.url
         spider.logger.debug('chrome is Starting')
-        self.chrome.get(url)
-        time.sleep(1)
-        return HtmlResponse(url=url, body=self.chrome.page_source, request=request, encoding='utf-8', status=200)
+        spider.chrome.get(url)
+        # time.sleep(1)
+        return HtmlResponse(url=url, body=spider.chrome.page_source, request=request, encoding='utf-8', status=200)
