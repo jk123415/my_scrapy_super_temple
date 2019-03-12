@@ -4,8 +4,14 @@
 #
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
+# cookies dict 在这里处理
+import random
+import base64
+import time
+from selenium import webdriver
 from scrapy import signals
+from scrapy.exceptions import IgnoreRequest
+from scrapy.http import HtmlResponse
 
 
 class ScrapyTempleSpiderMiddleware(object):
@@ -78,7 +84,13 @@ class ScrapyTempleDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        return None
+        # mongodb网址过滤
+        url = request.url
+        if spider.collection.find_one({'url': url}):
+            spider.logger.info('已经采集过: %s' % url)
+            raise IgnoreRequest
+        else:
+            return None
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
@@ -101,3 +113,55 @@ class ScrapyTempleDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class RandomUserAgent(object):
+    def __init__(self, agents, cookies):
+        # 使用初始化的agents列表
+        self.agents = agents
+        self.cookies = dict([x.split('=') for x in cookies.split('; ')])
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # 获取settings的USER_AGENT列表并返回
+        return cls(agents=crawler.settings.getlist('USER_AGENTS'),
+                   cookies=crawler.settings.get('COOKIES_STR'))
+
+    def process_request(self, request, spider):
+        # 随机设置Request报头header的User-Agent
+        request.headers.setdefault('User-Agent', random.choice(self.agents))
+        request.cookies = self.cookies
+
+
+# 代理服务器
+proxyServer = "http://http-dyn.abuyun.com:9020"
+# 代理隧道验证信息
+proxyUser = "H01234567890123D"
+proxyPass = "0123456789012345"
+# for Python2
+# proxyAuth = "Basic " + base64.b64encode(proxyUser + ":" + proxyPass)
+# for Python3
+proxyAuth = "Basic " + base64.urlsafe_b64encode(bytes((proxyUser + ":" + proxyPass), "ascii")).decode("utf8")
+
+
+class ProxyMiddleware(object):
+    def process_request(self, request, spider):
+        request.meta["proxy"] = proxyServer
+        request.headers["Proxy-Authorization"] = proxyAuth
+
+
+# selenium chrome 模拟请求
+class SeleniumChorme(object):
+    def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        self.chrome = webdriver.Remote('http://localhost:9515', desired_capabilities=options.to_capabilities())
+
+    def process_request(self, request, spider):
+        # Called for each request that goes through the downloader
+        # middleware.
+        url = request.url
+        spider.logger.debug('chrome is Starting')
+        self.chrome.get(url)
+        time.sleep(1)
+        return HtmlResponse(url=url, body=self.chrome.page_source, request=request, encoding='utf-8', status=200)
