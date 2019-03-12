@@ -26,7 +26,12 @@ class ScrapyTemplePipeline(object):
 
 
     def process_item(self, item, spider):
-
+        try:
+            body = "".join(item['body'])
+            item['body'] = self.del_special_char(body)
+        except Exception as e:
+            spider.logger.warn(e)
+            raise DropItem
         return item
 
 
@@ -44,7 +49,7 @@ class SaveData(object):
         )
 
     def open_spider(self, spider):
-        self.collection_name = spider.mongodb_db_name
+        self.collection_name = spider.mongodb_col_name
         spider.client = pymongo.MongoClient(self.mongodb_uri)
         spider.db = spider.client[self.mongodb_db]
         spider.collection = spider.db[self.collection_name]

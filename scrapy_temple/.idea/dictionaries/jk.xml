@@ -7,6 +7,7 @@
       <w>newspider</w>
       <w>robotstxt</w>
       <w>scrapy</w>
+      <w>telnetconsole</w>
     </words>
   </dictionary>
 </component>

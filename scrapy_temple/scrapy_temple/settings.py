@@ -16,8 +16,8 @@ NEWSPIDER_MODULE = 'scrapy_temple.spiders'
 
 
 # mongodb 数据库参数
-# MONGODB_URL = 'mongodb://localhost:27017/'
-# MONGODB_DB = 'DB_NAME'
+MONGODB_URL = 'mongodb://localhost:27017/'
+MONGODB_DB = 'test'
 # MONGODB_DB_COL = 'COLLECTION'
 
 
@@ -29,27 +29,27 @@ NEWSPIDER_MODULE = 'scrapy_temple.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+# DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-#CONCURRENT_REQUESTS_PER_DOMAIN = 16
-#CONCURRENT_REQUESTS_PER_IP = 16
+# CONCURRENT_REQUESTS_PER_DOMAIN = 16
+# CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+# TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
-#DEFAULT_REQUEST_HEADERS = {
+# DEFAULT_REQUEST_HEADERS = {
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 #   'Accept-Language': 'en',
-#}
+# }
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
@@ -59,17 +59,17 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#     # mongodb 过虑字段 url
-#     'scrapy_temple.middlewares.ScrapyTempleDownloaderMiddleware': 10,
-#     # 随机设置 user-agent 与 手动加cookies
-#     'scrapy_temple.middlewares.RandomUserAgent': 20,
-#     # 阿布云动态ip 代理
-#     'scrapy_temple.middlewares.ProxyMiddleware': 30,
-#     # selenium 模拟请求
-#     'scrapy_temple.middlewares.SeleniumChorme': 40,
-#
-# }
+DOWNLOADER_MIDDLEWARES = {
+    # mongodb 过虑字段 url
+    'scrapy_temple.middlewares.ScrapyTempleDownloaderMiddleware': 10,
+    # 随机设置 user-agent 与 手动加cookies
+    # 'scrapy_temple.middlewares.RandomUserAgent': 20,
+    # 阿布云动态ip 代理
+    # 'scrapy_temple.middlewares.ProxyMiddleware': 30,
+    # selenium 模拟请求
+    # 'scrapy_temple.middlewares.SeleniumChorme': 40,
+
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -79,10 +79,10 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#     'scrapy_temple.pipelines.ScrapyTemplePipeline': 300,
-#     'scrapy_temple.pipelines.SaveData': 400,
-# }
+ITEM_PIPELINES = {
+    'scrapy_temple.pipelines.ScrapyTemplePipeline': 300,
+    'scrapy_temple.pipelines.SaveData': 400,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -116,4 +116,4 @@ USER_AGENTS = [
     "Mozilla/5.0 (X11; Linux i686; U;) Gecko/20070322 Kazehakase/0.4.5"
 ]
 # 中间件处理成dict
-COOKIES_STR = '_ga=GA1.2.1982356954.1552032482; _octo=GH1.1.1651166253.1552032483; has_recent_activity=1; tz=Asia%2FShanghai; user_session=YWu057qVFf4_J7TrIS1Bqvj8XdM-yf8V0pfafq5bJ8aArEv1'
+COOKIES_STR = ''
